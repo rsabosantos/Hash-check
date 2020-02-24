@@ -1,0 +1,44 @@
+@echo off
+title HashChecker
+color 0a
+
+:main
+cls
+echo         Hash Checker       Note: Place the File or Application on your Desktop.
+echo.
+set /P Value1="Site Hash Value:           "  
+set /P Encryption="Cryptographic Hash Used:          "
+set /P Filename="File or Application name with Extension:         "
+echo.
+certutil -hashfile %userprofile%\Desktop\%Filename% %Encryption% > %TEMP%\checksum.txt
+for /f "tokens=*" %%a in (%TEMP%\checksum.txt) do (
+ if %%a EQU %Value1% (
+
+echo.
+echo.
+ echo      Great!   Checksum Match Found!  %Value1%
+echo.
+echo.
+ echo.                    
+ echo.
+ pause
+del /f %TEMP%\checksum.txt
+goto main
+ )
+)
+for /f "tokens=*" %%a in (%TEMP%\checksum.txt) do (
+if %%a NEQ %Value1% (
+echo.
+echo.
+echo       Warning! ....  %Value1%....  No Match found.
+echo.
+echo.                          
+echo.
+pause
+del /f %TEMP%\checksum.txt
+goto main
+)
+)      
+
+
+
